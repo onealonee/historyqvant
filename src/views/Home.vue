@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
-    <div class="background">
-      <div class="content">
+  <div className="home">
+    <div className="background">
+      <div className="content">
         <h1>Добро пожаловать в Исторический Кванториум</h1>
         <p>Изучайте историю вместе с нами!</p>
       </div>

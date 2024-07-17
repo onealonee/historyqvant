@@ -9,6 +9,7 @@ import IntellectualGamesPage from '@/views/IntellectualGamesPage.vue';
 
 const routes = [
   { path: '/', name: 'home', component: Home },
+  { path: '/home', redirect: { name: 'home' } }, // Перенаправление /home на корневой маршрут
   { path: '/video', name: 'video', component: VideoPage },
   { path: '/reconstruction', name: 'reconstruction', component: ReconstructionPage },
   { path: '/methodical', name: 'methodical', component: MethodicalPage },
