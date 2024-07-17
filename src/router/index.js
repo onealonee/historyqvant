@@ -1,25 +1,25 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '@/views/Home.vue';
+import VideoPage from '@/views/VideoPage.vue';
+import ReconstructionPage from '@/views/ReconstructionPage.vue';
+import MethodicalPage from '@/views/MethodicalPage.vue';
+import LocalHistoryPage from '@/views/LocalHistoryPage.vue';
+import BiographiesPage from '@/views/BiographiesPage.vue';
+import IntellectualGamesPage from '@/views/IntellectualGamesPage.vue';
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+  { path: '/', name: 'home', component: Home },
+  { path: '/video', name: 'video', component: VideoPage },
+  { path: '/reconstruction', name: 'reconstruction', component: ReconstructionPage },
+  { path: '/methodical', name: 'methodical', component: MethodicalPage },
+  { path: '/local_history', name: 'local_history', component: LocalHistoryPage },
+  { path: '/biographies', name: 'biographies', component: BiographiesPage },
+  { path: '/intellectual_games', name: 'intellectual_games', component: IntellectualGamesPage },
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(),
+  routes,
+});
 
-export default router
+export default router;
