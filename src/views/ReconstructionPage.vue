@@ -65,6 +65,7 @@ export default {
 <style scoped>
 .reconstruction-page {
   padding: 20px;
+  margin-top: 100px; /* Добавлен верхний отступ */
 }
 
 .biograph {

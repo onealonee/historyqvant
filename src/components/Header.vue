@@ -7,7 +7,7 @@
           <button @click="navigateTo('reconstruction')" class="btn btn-link">Реконструкция</button>
           <button @click="navigateTo('methodical')" class="btn btn-link">Методические материалы</button>
         </div>
-        <div class="logo">
+        <div class="logo" @click="navigateToHome">
           <img src="@/assets/logo_w_text_2_2.png" alt="Исторический кванториум" class="logo-image" />
         </div>
         <div class="right-buttons d-flex flex-grow-1 justify-content-end">
@@ -26,6 +26,9 @@ export default {
   methods: {
     navigateTo(section) {
       this.$router.push({ name: section });
+    },
+    navigateToHome() {
+      this.$router.push({ name: 'home' });
     }
   }
 }
@@ -89,6 +92,7 @@ button:hover {
 .logo {
   text-align: center;
   flex: 0 1 auto; /* Логотип занимает свое место, не растягивая контейнер */
+  cursor: pointer; /* Указываем, что логотип кликабелен */
 }
 
 .logo-image {
