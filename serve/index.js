@@ -11,3 +11,6 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+sequelize
+https://chatgpt.com/share/31ebd670-da82-4be6-b54b-2b73292e2f7d
