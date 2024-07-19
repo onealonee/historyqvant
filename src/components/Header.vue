@@ -11,7 +11,7 @@
           <img src="@/assets/logo_w_text_2_2.png" alt="Исторический кванториум" class="logo-image" />
         </div>
         <div class="right-buttons d-flex flex-grow-1 justify-content-end">
-          <button @click="navigateTo('local_history')" class="btn btn-link">Краеведение</button>
+          <button @click="navigateTo('local_history')" class="btn btn-link">Кредение</button>
           <button @click="navigateTo('biographies')" class="btn btn-link">Биографии</button>
           <button @click="navigateTo('intellectual_games')" class="btn btn-link">Интеллектуальные игры</button>
         </div>
