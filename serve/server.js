@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const cors = require('cors');
 const port = 5001;
 const { Pool } = require('pg');
-
 
 const pool = new Pool({
     user: 'volck',
@@ -17,7 +17,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.use(express.json());
-//выгрузка для страницы
+app.use(cors()); // Разрешить CORS для всех запросов
+
+// выгрузка для страницы
 app.get('/figures', async (req, res) => {
     try {
         const result = await pool.query('SELECT id, name, description FROM figures');
@@ -47,12 +49,7 @@ app.post('/figures/:id/image', upload.single('image'), async (req, res) => {
     }
 });
 
-
-
-
 // Запуск сервера
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
-
-
