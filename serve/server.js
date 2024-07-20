@@ -31,12 +31,8 @@ const upload = multer({ storage });
 
 app.use(express.json());
 
-app.use(cors()); // Разрешить CORS для всех запросов
+app.use(cors());
 
-// выгрузка для страницы
-
-
-//выгрузка для страницы
 
 app.get('/figures', async (req, res) => {
     try {
@@ -84,7 +80,32 @@ app.get('/figures/:id/image', async (req, res) => {
     }
 });
 
+// Маршрут для загрузки модели и текстур
+app.post('/upload', upload.fields([{ name: 'model', maxCount: 1 }, { name: 'textures', maxCount: 10 }]), async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const modelPath = req.files['model'][0].path;
+        const textures = req.files['textures'].map(file => file.path);
 
+        const figureResult = await pool.query(
+            'INSERT INTO figures (name, description, filePath) VALUES ($1, $2, $3) RETURNING *',
+            [name, description, modelPath]
+        );
+
+        const figureId = figureResult.rows[0].id;
+
+        for (const texturePath of textures) {
+            await pool.query(
+                'INSERT INTO textures (figure_id, filePath) VALUES ($1, $2)',
+                [figureId, texturePath]
+            );
+        }
+
+        res.status(201).json(figureResult.rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // Запуск сервера
 app.listen(port, () => {
