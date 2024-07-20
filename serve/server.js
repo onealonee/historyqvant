@@ -40,12 +40,13 @@ app.use(cors()); // Разрешить CORS для всех запросов
 
 app.get('/figures', async (req, res) => {
     try {
-        const result = await pool.query('SELECT id, name, description FROM figures');
+        const result = await pool.query('SELECT id, name, description, image_path FROM figures');
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // загрузка картинок
 app.post('/figures/:id/image', upload.single('image'), async (req, res) => {
