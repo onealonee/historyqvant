@@ -1,9 +1,16 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+
 const cors = require('cors');
 const port = 5001;
 const { Pool } = require('pg');
+
+const path = require('path');
+const port = 5001;
+const { Pool } = require('pg');
+const fs = require('fs');
+
 
 const pool = new Pool({
     user: 'volck',
@@ -13,13 +20,27 @@ const pool = new Pool({
     port: 5432,
 });
 
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Папка, куда будут сохраняться загруженные файлы
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const filename = `${Date.now()}${ext}`;
+        cb(null, filename);
+    },
+});
 const upload = multer({ storage });
 
 app.use(express.json());
+
 app.use(cors()); // Разрешить CORS для всех запросов
 
 // выгрузка для страницы
+
+
+//выгрузка для страницы
+
 app.get('/figures', async (req, res) => {
     try {
         const result = await pool.query('SELECT id, name, description FROM figures');
@@ -48,6 +69,25 @@ app.post('/figures/:id/image', upload.single('image'), async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+app.get('/figures/:id/image', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query('SELECT image_path FROM figures WHERE id = $1', [id]);
+        const imagePath = result.rows[0]?.image_path;
+
+        if (imagePath && fs.existsSync(`.${imagePath}`)) {
+            res.sendFile(path.resolve(`.${imagePath}`));
+        } else {
+            res.status(404).json({ error: 'Image not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 // Запуск сервера
 app.listen(port, () => {
