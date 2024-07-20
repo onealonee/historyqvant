@@ -1,6 +1,8 @@
 <template>
   <div class="card bg-dark text-white darken-card">
-    <img :src="image" class="card-img" :alt="title" />
+    <div class="card-img-container">
+      <img :src="image" class="card-img" :alt="title" />
+    </div>
     <div class="card-img-overlay d-flex flex-column justify-content-end p-3">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">{{ description }}</p>
@@ -38,34 +40,47 @@ export default {
   background-color: rgba(0, 0, 0, 0.8); /* Ensure dark overlay */
   border: none;
   transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 450px; /* Increase card height */
 }
 
 .darken-card:hover {
   transform: scale(1.05);
 }
 
+.card-img-container {
+  flex: 1; /* Allow the image container to grow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Fill the entire height of the card */
+  overflow: hidden; /* Hide overflow to ensure centering */
+}
+
 .card-img {
-  height: 300px; /* Adjust height as needed */
-  object-fit: cover;
-  filter: brightness(0.7); /* Darken image */
+  width: 100%; /* Ensure image covers the card width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure image covers the card while maintaining aspect ratio */
 }
 
 .card-title {
-  margin-bottom: 8px;
-  font-size: 1.25rem;
+  margin-bottom: 12px; /* Slightly larger margin */
+  font-size: 1.25rem; /* Larger font size */
   color: #fff; /* White text for better contrast */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .card-text {
-  margin-bottom: 20px;
+  margin-bottom: 12px; /* Slightly larger margin */
   color: #fff; /* White text for better contrast */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .card-img-overlay {
   background: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
+  padding: 1rem; /* Reduce padding */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
