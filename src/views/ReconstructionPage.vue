@@ -21,10 +21,8 @@
 </template>
 
 <script>
+import axios from 'axios';
 import CardComponent from '@/components/CardComponent.vue';
-import model1 from '@/assets/para.png';
-import model2 from '@/assets/povoz.png';
-import model3 from '@/assets/plat4.png';
 
 export default {
   name: 'ReconstructionPage',
@@ -33,31 +31,27 @@ export default {
   },
   data() {
     return {
-      models: [
-        {
-          id: 1,
-          image: model1,
-          title: 'Модель женского русского народного костюма',
-          description: 'Познакомьтесь с русским народным костюмом. Представленная модель хранится в Липецком областном краеведческом музее.',
-          link: '/plat_1.html',
-        },
-        {
-          id: 2,
-          image: model2,
-          title: 'Модель женского русского народного костюма',
-          description: 'Познакомьтесь с русским народным костюмом. Представленная модель хранится в Липецком областном краеведческом музее.',
-          link: '/plat_2.html',
-        },
-        {
-          id: 3,
-          image: model3,
-          title: 'Романовская игрушка',
-          description: 'Познакомьтесь с романовской игрушкой. Представленная модель хранится в Липецком областном краеведческом музее.',
-          link: '/toy_1.html',
-        },
-        // Добавьте остальные модели по аналогии
-      ],
+      models: [],
     };
+  },
+  created() {
+    this.fetchModels();
+  },
+  methods: {
+    async fetchModels() {
+      try {
+        const response = await axios.get('http://localhost:5001/figures');
+        this.models = response.data.map(model => ({
+          id: model.id,
+          image: model.image,
+          title: model.name,
+          description: model.description,
+          link: `/model/${model.id}`, // Замените на нужный путь
+        }));
+      } catch (error) {
+        console.error('Ошибка при загрузке моделей:', error);
+      }
+    },
   },
 };
 </script>
