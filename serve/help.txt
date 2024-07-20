@@ -27,3 +27,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (event) =
     }
 });
 </script>
+
+
+
+<img src={`data:image/png;base64,${imageBase64}`} alt="Figure Image" />
