@@ -3,9 +3,6 @@ const app = express();
 const multer = require('multer');
 
 const cors = require('cors');
-const port = 5001;
-const { Pool } = require('pg');
-
 const path = require('path');
 const port = 5001;
 const { Pool } = require('pg');
