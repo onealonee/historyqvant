@@ -13,20 +13,36 @@ const pool = new Pool({
 });
 
 app.use(express.json());
-
+//выгрузка для страницы
 app.get('/figures', async (req, res) => {
     try {
-        const result = await pool.query('SELECT id, name, description FROM figures');
+        const result = await pool.query('SELECT id, name, description, image FROM figures');
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Маршрут для главной страницы
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
+// загрузка картинок
+app.post('/figures/:id/image', async (req, res) => {
+    const { id } = req.params;
+    const { image } = req.body; // Предполагаем, что изображение приходит в формате Base64
+
+    if (!image) {
+        return res.status(400).json({ error: 'Нихуя' });
+    }
+
+    try {
+        // Обновите запись в базе данных с новым изображением
+        await pool.query('UPDATE figures SET image = $1 WHERE id = $2', [image, id]);
+        res.status(200).json({ message: 'Успешно' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+
+
+
 
 
 // Запуск сервера

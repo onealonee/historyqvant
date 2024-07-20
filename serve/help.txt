@@ -1,0 +1,29 @@
+<form id="uploadForm">
+    <input type="file" id="fileInput" />
+    <button type="submit">Upload</button>
+</form>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            const base64Image = reader.result.split(',')[1];
+            const response = await fetch('/figures/1/image', { // Замените '1' на актуальный ID
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: base64Image })
+            });
+            const result = await response.json();
+            console.log(result);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
