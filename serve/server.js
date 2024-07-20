@@ -84,7 +84,7 @@ app.get('/figures/:id/image', async (req, res) => {
 // Маршрут для загрузки модели и текстур
 app.post('/upload', upload.fields([{ name: 'model', maxCount: 1 }, { name: 'textures', maxCount: 10 }]), async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { id } = req.body;
         const modelPath = req.files['model'][0].path;
         const textures = req.files['textures'].map(file => file.path);
 
