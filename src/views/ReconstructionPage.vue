@@ -43,7 +43,7 @@ export default {
         const response = await axios.get('http://localhost:5001/figures');
         this.models = response.data.map(model => ({
           id: model.id,
-          image: model.image_path ? `http://localhost:5001/figuras/${id}/image` : '', // Assuming image_path is the path stored in DB
+          image: model.image_path ? `http://localhost:5001/figures/${model.id}/image` : '', // Используйте model.id
           title: model.name,
           description: model.description,
           link: `/model/${model.id}`, // Замените на нужный путь
