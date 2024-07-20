@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const multer = require('multer');
 const port = 5001;
 const { Pool } = require('pg');
 
@@ -12,11 +13,14 @@ const pool = new Pool({
     port: 5432,
 });
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 app.use(express.json());
 //выгрузка для страницы
 app.get('/figures', async (req, res) => {
     try {
-        const result = await pool.query('SELECT id, name, description, image FROM figures');
+        const result = await pool.query('SELECT id, name, description FROM figures');
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -24,23 +28,24 @@ app.get('/figures', async (req, res) => {
 });
 
 // загрузка картинок
-app.post('/figures/:id/image', async (req, res) => {
+app.post('/figures/:id/image', upload.single('image'), async (req, res) => {
     const { id } = req.params;
-    const { image } = req.body; // Предполагаем, что изображение приходит в формате Base64
+    const image = req.file;
 
     if (!image) {
-        return res.status(400).json({ error: 'Нихуя' });
+        return res.status(400).json({ error: 'No image file provided' });
     }
 
     try {
-        // Обновите запись в базе данных с новым изображением
-        await pool.query('UPDATE figures SET image = $1 WHERE id = $2', [image, id]);
-        res.status(200).json({ message: 'Успешно' });
+        const imagePath = `/uploads/${image.filename}`;
+
+        // Обновление записи в базе данных с новым путем к изображению
+        await pool.query('UPDATE figures SET image_path = $1 WHERE id = $2', [imagePath, id]);
+        res.status(200).json({ message: 'Image updated successfully', path: imagePath });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
-
 
 
 
