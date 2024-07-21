@@ -36,14 +36,14 @@ export default {
 
 <style scoped>
 .header {
-  position: absolute;
+  position: fixed; /* Изменено с absolute на fixed */
   top: 0;
   width: 100%;
   background-color: rgba(173, 216, 230, 0.5); /* Прозрачный фон */
   color: #fff;
   padding: 20px 0; /* Увеличен padding для большей высоты */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 10; /* Убедитесь, что хедер находится выше основного контента */
+  z-index: 1000; /* Убедитесь, что хедер находится выше основного контента */
 }
 
 .container {
