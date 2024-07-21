@@ -89,7 +89,7 @@ app.post('/upload', upload.fields([{ name: 'model', maxCount: 1 }, { name: 'text
         const textures = req.files['textures'].map(file => file.path);
 
         const figureResult = await pool.query(
-            'INSERT INTO figures (name, description, filePath) VALUES ($1, $2, $3) RETURNING *',
+            'INSERT INTO figures (, , filePath) VALUES ($1, $2, $3) where id = $4',
             [name, description, modelPath]
         );
 
@@ -107,7 +107,11 @@ app.post('/upload', upload.fields([{ name: 'model', maxCount: 1 }, { name: 'text
         res.status(500).json({ error: error.message });
     }
 });
-
+app.get('/uploads/:filename', (req, res) => {
+    const { filename } = req.params;
+    const file = path.join(__dirname, 'uploads', filename);
+    res.download(file);
+});
 // Запуск сервера
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
