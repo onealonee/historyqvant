@@ -1,4 +1,8 @@
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  transpileDependencies: true
-})
+// vue.config.js
+import { defineConfig } from '@vue/cli-service';
+import path from 'path';
+
+export default defineConfig({
+  transpileDependencies: true,
+  // остальные настройки
+});
