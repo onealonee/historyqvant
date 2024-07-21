@@ -4,32 +4,31 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
+import { useRoute } from 'vue-router';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
 // Создаем ссылки
 const canvasRef = ref(null);
+const route = useRoute();
 
 let scene;
 let renderer;
 let controls;
 let camera;
-let box;
-
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const boxMaterial = new THREE.MeshStandardMaterial({ color: "mediumpurple" });
-box = new THREE.Mesh(boxGeometry, boxMaterial);
-box.position.set(0, 0, -2);
-
-const ambientLight = new THREE.AmbientLight("#ffffff", 1);
 
 const resizeCallback = () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  if (renderer) {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
 };
 
 onMounted(() => {
+  const modelId = route.params.id;
+
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
       75,
@@ -37,12 +36,12 @@ onMounted(() => {
       0.1,
       100
   );
-  camera.position.y = 1;
-  camera.position.z = 2;
+  camera.position.set(-0.35376038574295343, 3.7200709885144376, -2.6243715656650144); // Устанавливаем начальную позицию камеры
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   scene.add(camera);
-  scene.add(box);
+
+  const ambientLight = new THREE.AmbientLight("#ffffff", 1);
   scene.add(ambientLight);
 
   renderer = new THREE.WebGLRenderer({
@@ -61,9 +60,28 @@ onMounted(() => {
   controls.enableZoom = true; // Включает масштабирование
   controls.enablePan = true; // Включает панорамирование
 
+  // Загрузка модели и текстуры
+  const loader = new FBXLoader();
+  const textureLoader = new THREE.TextureLoader();
+
+  const modelPath = `/models/model1/koz.fbx`;
+  const texturePath = `/models/model1/kozel.jpg`;
+
+  textureLoader.load(texturePath, (texture) => {
+    loader.load(modelPath, (fbx) => {
+      fbx.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture;
+        }
+      });
+      fbx.scale.set(0.001, 0.001, 0.001);  // Уменьшаем масштаб модели еще в 10 раз
+      fbx.position.set(0, 0, 0); // Убедитесь, что модель находится в центре сцены
+      scene.add(fbx);
+    });
+  });
+
   // Анимация сцены
   const loop = () => {
-    box.rotation.y += 0.02;
     controls.update(); // Обновляем OrbitControls
     renderer.render(scene, camera);
     requestAnimationFrame(loop);
