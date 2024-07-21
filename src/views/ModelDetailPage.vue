@@ -64,8 +64,8 @@ onMounted(() => {
   const loader = new FBXLoader();
   const textureLoader = new THREE.TextureLoader();
 
-  const modelPath = `/models/model1/koz.fbx`;
-  const texturePath = `/models/model1/kozel.jpg`;
+  const modelPath = `http://localhost:5001/uploads/koz.fbx`;
+  const texturePath = `http://localhost:5001/uploads/kozel.jpg`;
 
   textureLoader.load(texturePath, (texture) => {
     loader.load(modelPath, (fbx) => {
